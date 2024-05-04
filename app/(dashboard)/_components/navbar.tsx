@@ -9,7 +9,7 @@ import { SearchInput } from "./search-input";
 import { InviteButton } from "./invite-button";
 
 export const Navbar = () => {
-  const {organization} = useOrganization();
+  const { organization } = useOrganization();
   return (
     <div className="flex items-center gap-x-4 p-5 ">
       <div className="hidden lg:flex-1 lg:flex">
