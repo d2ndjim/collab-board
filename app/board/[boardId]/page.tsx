@@ -1,7 +1,13 @@
 import { Canvax } from "./_components/canvax";
 
-const BoardIdPage = () => {
-  return <Canvax />
+interface BoardIdPageProps {
+  params: {
+    boardId: string;
+  };
 }
+
+const BoardIdPage = ({params}: BoardIdPageProps) => {
+  return <Canvax boardId={params.boardId} />;
+};
 
 export default BoardIdPage;
