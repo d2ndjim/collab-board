@@ -8,7 +8,7 @@ import {
 export interface HintProps {
   label: string;
   children: React.ReactNode;
-  side?: "top" | "top" | "left" | "right";
+  side?: "top" | "bottom" | "left" | "right";
   align?: "start" | "center" | "end";
   sideOffset?: number;
   alignOffset?: number;
