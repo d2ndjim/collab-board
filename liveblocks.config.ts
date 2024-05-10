@@ -1,7 +1,8 @@
 import { createClient } from "@liveblocks/client";
 import { createRoomContext, createLiveblocksContext } from "@liveblocks/react";
-  
+
 const client = createClient({
+  throttle: 16,
   authEndpoint: "/api/liveblocks-auth",
   // publicApiKey:
   //   "pk_dev_-nkjyGMOea8hq-Bwy314qoPvHzpQoZishXBMc-Ci1h-4QxmkamWlhk6-pJBnRvFS",
@@ -51,7 +52,7 @@ const client = createClient({
 // and that will automatically be kept in sync. Accessible through the
 // `user.presence` property. Must be JSON-serializable.
 type Presence = {
-  // cursor: { x: number, y: number } | null,
+  cursor: { x: number; y: number } | null;
   // ...
 };
 
@@ -68,11 +69,11 @@ type Storage = {
 // provided by your own custom auth back end (if used). Useful for data that
 // will not change during a session, like a user's name or avatar.
 type UserMeta = {
-  id?: string,  
+  id?: string;
   info?: {
-    name?: string,  
-    picture?: string,
-  }
+    name?: string;
+    picture?: string;
+  };
 };
 
 // Optionally, the type of custom events broadcast and listened to in this
@@ -131,12 +132,14 @@ export const {
     useMarkThreadAsRead,
     useRoomNotificationSettings,
     useUpdateRoomNotificationSettings,
-  
+
     // These hooks can be exported from either context
     // useUser,
     // useRoomInfo
-  }
-} = createRoomContext<Presence, Storage, UserMeta, RoomEvent, ThreadMetadata>(client);
+  },
+} = createRoomContext<Presence, Storage, UserMeta, RoomEvent, ThreadMetadata>(
+  client,
+);
 
 // Project-level hooks, use inside `LiveblocksProvider`
 export const {
@@ -146,9 +149,9 @@ export const {
     useMarkAllInboxNotificationsAsRead,
     useInboxNotifications,
     useUnreadInboxNotificationsCount,
-  
+
     // These hooks can be exported from either context
     useUser,
     useRoomInfo,
-  }
+  },
 } = createLiveblocksContext<UserMeta, ThreadMetadata>(client);
