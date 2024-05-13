@@ -26,6 +26,7 @@ import { useCallback, useMemo, useState } from "react";
 import { CursorsPrescence } from "./cursors-prescence";
 import { connectionIdToColor, pointerEventToCanvasPoint } from "@/lib/utils";
 import { LayerPreview } from "./layer-preview";
+import { SelectionBox } from "./selection-box";
 
 const MAX_LAYERS = 100;
 interface CanvaxProps {
@@ -173,7 +174,7 @@ export const Canvax = ({ boardId }: CanvaxProps) => {
         redo={history.redo}
       />
       <svg
-        className="h-[100vh] w-[100vw"
+        className="h-[100vh] w-[100vw]"
         onWheel={onWheel}
         onPointerMove={onPointerMove}
         onPointerLeave={onPointerLeave}
@@ -188,6 +189,7 @@ export const Canvax = ({ boardId }: CanvaxProps) => {
               selectionColor={layerIdsToColorSelection[layerId]}
             />
           ))}
+          <SelectionBox onResizeHandlePointerDown={() => {}} />
           <CursorsPrescence />
         </g>
       </svg>
