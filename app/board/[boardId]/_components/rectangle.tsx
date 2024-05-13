@@ -1,3 +1,4 @@
+import { ColorToCSS } from "@/lib/utils";
 import { RectangleLayer } from "@/types/canvas";
 
 interface RectangleProps {
@@ -19,14 +20,14 @@ export const Rectangle = ({
     <rect
       className="drop-shadow-md"
       onPointerDown={(e) => onPointerDown(e, id)}
-      style={{ transform: `translate(${x}px, ${y}px)` }}
+      style={{ transform: `translate(${x}px, ${y}px)`}}
       x={0}
       y={0}
       width={width}
       height={height}
       strokeWidth={1}
-      fill="#000"
-      stroke="transparent"
+      fill={fill ? ColorToCSS(fill) : "#fff"}
+      stroke={selectionColor || "transparent"}
     />
   );
 };
