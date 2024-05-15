@@ -1,8 +1,8 @@
 "use client";
 
+import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import { LiveObject } from "@liveblocks/client";
-
 import {
   useHistory,
   useCanRedo,
@@ -12,6 +12,16 @@ import {
   useOthersMapped,
   useSelf,
 } from "@/liveblocks.config";
+import { useDisableScrollBounce } from "@/hooks/use-disable-scroll-bounce";
+import { useDeleteLayers } from "@/hooks/use-delete-layers";
+import {
+  ColorToCSS,
+  connectionIdToColor,
+  findIntersectingLayersWithRectangle,
+  penPointsToPathLayer,
+  pointerEventToCanvasPoint,
+  resizeBounds,
+} from "@/lib/utils";
 import {
   Camera,
   CanvasMode,
@@ -25,16 +35,7 @@ import {
 import { Info } from "./info";
 import { Participants } from "./participants";
 import { Toolbar } from "./toolbar";
-import React, { useCallback, useMemo, useState } from "react";
 import { CursorsPrescence } from "./cursors-prescence";
-import {
-  ColorToCSS,
-  connectionIdToColor,
-  findIntersectingLayersWithRectangle,
-  penPointsToPathLayer,
-  pointerEventToCanvasPoint,
-  resizeBounds,
-} from "@/lib/utils";
 import { LayerPreview } from "./layer-preview";
 import { SelectionBox } from "./selection-box";
 import { SelectionTools } from "./selection-tools";
@@ -58,6 +59,7 @@ export const Canvax = ({ boardId }: CanvaxProps) => {
     b: 0,
   });
 
+  useDisableScrollBounce();
   const history = useHistory();
   const canRedo = useCanRedo();
   const canUndo = useCanUndo();
@@ -380,6 +382,31 @@ export const Canvax = ({ boardId }: CanvaxProps) => {
 
     return layerIdsToColorSelection;
   }, [selections]);
+
+  const deleteLayers = useDeleteLayers();
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      switch (e.key) {
+        case "z": {
+          if (e.ctrlKey || e.metaKey) {
+            if (e.shiftKey) {
+              history.redo();
+            } else {
+              history.undo();
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [deleteLayers, history]);
 
   return (
     <main className="h-full w-full relative bg-neutral-100 touch-none">
